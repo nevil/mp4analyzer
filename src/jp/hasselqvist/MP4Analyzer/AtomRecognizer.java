@@ -22,7 +22,7 @@ public class AtomRecognizer {
 		
 		return mAtomRecognizer;
 	}
-	
+/*	
 	public void parse() {
 		long size = -1;
 		String atom;
@@ -45,10 +45,19 @@ public class AtomRecognizer {
 			mTree.addLeaf(Atom.createAtom(atom, size));
 		} while(true);
 	}
+*/
+	public Atom identifyAtom() {
+		long size = mFile.readInt32();
+		String type = mFile.readAtomType();
 
-	final public static Atom createAtom(String aType, long size) {
-		if ("ftyp".equals(aType))
-			return new AtomFtyp(aType, size);
+		if ("ftyp".equals(type))
+			return new AtomFtyp(type, size);
+		if ("free".equals(type))
+			return null;
+		else if ("moov".equals(type))
+			return null;
+		else if ("mdat".equals(type))
+			return null;
 
 		return null;
 	}

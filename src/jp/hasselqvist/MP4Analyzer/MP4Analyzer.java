@@ -13,6 +13,10 @@ public class MP4Analyzer {
 		mFile = new MP4FileProvider(aFile);
 	}
 
+	public void analyze() {
+		
+	}
+	
 	public void printTree() {
 		AtomTree.Leaf tree = mTree.getRoot();
 
@@ -41,7 +45,7 @@ public class MP4Analyzer {
 		MP4Analyzer analyzer;
 		try {
 			analyzer = new MP4Analyzer(args[0]);
-			analyzer.parse();
+			analyzer.analyze();
 			analyzer.printTree();
 		} catch (IOException e) {
 			e.printStackTrace();
