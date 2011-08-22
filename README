@@ -1,0 +1,8 @@
+A simple mp4 file analyzer.
+The plan is that it should be able to:
+- show Atom/Box structure of the file
+  - Target is to have GUI and not only text based
+  - show understandable info about the atom as well as raw data (hex/ascii combo)
+- show info about the media streams (codec info)
+- calculate audio/video interleave depth (possibly displaying as a graph)
+- Display meta data (artist, title, ...)

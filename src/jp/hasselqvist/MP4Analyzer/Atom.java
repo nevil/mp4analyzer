@@ -1,7 +1,5 @@
 package jp.hasselqvist.MP4Analyzer;
 
-import jp.hasselqvist.MP4Analyzer.atoms.AtomFtyp;
-
 public abstract class Atom {
 	private String mType;
 	private long mSize;
@@ -21,12 +19,5 @@ public abstract class Atom {
 
 	public String toString() {
 		return String.format("%s (%d)", mType, mSize);
-	}
-
-	final public static Atom createAtom(String aType, long size) {
-		if ("ftyp".equals(aType))
-			return new AtomFtyp(aType, size);
-
-		return null;
 	}
 }
