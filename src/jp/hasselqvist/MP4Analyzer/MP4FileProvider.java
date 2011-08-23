@@ -1,26 +1,37 @@
 package jp.hasselqvist.MP4Analyzer;
 
-import java.io.BufferedInputStream;
+import java.io.RandomAccessFile;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 public class MP4FileProvider {
-	private InputStream mStream;
+	private static MP4FileProvider mInstance;
+	private RandomAccessFile mFile;
 	private long mFileSize;
 
-	public MP4FileProvider(String aFilePath) throws IOException {
-		mStream = null;
+	private MP4FileProvider(String aFilePath) throws IOException {
+		mFile = null;
 
 		try {
 			File file = new File(aFilePath);
 			mFileSize = file.length();
-			mStream = new BufferedInputStream(new FileInputStream(file));
+			mFile = new RandomAccessFile(file, "r");
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw e;
 		}
+	}
+
+	public static MP4FileProvider createProvider(String aFilePath) throws IOException {
+		if (mInstance == null)
+			mInstance = new MP4FileProvider(aFilePath);
+
+		return mInstance;
+	}
+
+	public static MP4FileProvider getProvider() {
+		return mInstance;
 	}
 
 	public long getFileSize() {
@@ -32,7 +43,7 @@ public class MP4FileProvider {
 
 		try {
 			int read;
-			read = mStream.read(b);
+			read = mFile.read(b);
 			if (read != b.length)
 				return -1;
 		} catch (IOException e) {
@@ -40,13 +51,13 @@ public class MP4FileProvider {
 			return -1;
 		}
 
-		return ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) | ((b[2] & 0xFF) << 8) | (b[3] & 0x000000FF);
+		return ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) | ((b[2] & 0xFF) << 8) | (b[3] & 0xFF);
 	}
 
 	public String readBoxType() {
 		byte[] type = new byte[4];
 		try {
-			mStream.read(type);
+			mFile.read(type);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;

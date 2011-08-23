@@ -6,15 +6,24 @@ import java.util.Iterator;
 
 public class MP4Analyzer {
 	BoxTree mTree;
-	MP4FileProvider mFile;
 
 	MP4Analyzer(String aFile) throws IOException {
 		mTree = new BoxTree();
-		mFile = new MP4FileProvider(aFile);
+		MP4FileProvider.createProvider(aFile);
+		BoxRecognizer.createRecognizer(MP4FileProvider.getProvider());
 	}
 
 	public void analyze() {
+		BoxRecognizer recognizer = BoxRecognizer.getRecognizer();
+		Box box = null;
 		
+		do {
+			box = recognizer.identifyBox();
+			if (box == null)
+				break;
+
+			mTree.addLeaf(box);
+		} while (box != null);
 	}
 	
 	public void printTree() {

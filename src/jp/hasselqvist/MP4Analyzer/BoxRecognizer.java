@@ -1,7 +1,5 @@
 package jp.hasselqvist.MP4Analyzer;
 
-import java.io.IOException;
-
 import jp.hasselqvist.MP4Analyzer.boxes.BoxFtyp;
 
 // Singleton recognizer
@@ -9,19 +7,22 @@ public class BoxRecognizer {
 	private static BoxRecognizer mBoxRecognizer;
 	private MP4FileProvider mFile;
 
-	private BoxRecognizer() {
-		
+	private BoxRecognizer(MP4FileProvider aProvider) {
+		mBoxRecognizer.mFile = aProvider;
 	}
 
-	public static BoxRecognizer createRecognizer(MP4FileProvider aFile) {
-		if (mBoxRecognizer == null) {
-			mBoxRecognizer = new BoxRecognizer();
-		}
-
-		mBoxRecognizer.mFile = aFile;
-		
+	public static BoxRecognizer getRecognizer() {
 		return mBoxRecognizer;
 	}
+
+	public static BoxRecognizer createRecognizer(MP4FileProvider aProvider) {
+		if (mBoxRecognizer == null) {
+			mBoxRecognizer = new BoxRecognizer(aProvider);
+		}
+
+		return mBoxRecognizer;
+	}
+
 /*	
 	public void parse() {
 		long size = -1;
