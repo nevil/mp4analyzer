@@ -1,9 +1,8 @@
 package jp.hasselqvist.MP4Analyzer;
 
-import java.io.RandomAccessFile;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 
 public class MP4FileProvider {
 	private static MP4FileProvider mInstance;
@@ -36,6 +35,24 @@ public class MP4FileProvider {
 
 	public long getFileSize() {
 		return mFileSize;
+	}
+
+	public long getPosition() {
+		try {
+			return mFile.getFilePointer();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
+
+	public int skipBytes(int aOffset) {
+		try {
+			return mFile.skipBytes(aOffset);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return -1;
+		}
 	}
 
 	public long readInt32() {

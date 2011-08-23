@@ -16,16 +16,18 @@ public class MP4Analyzer {
 	public void analyze() {
 		BoxRecognizer recognizer = BoxRecognizer.getRecognizer();
 		Box box = null;
-		
+
 		do {
 			box = recognizer.identifyBox();
 			if (box == null)
 				break;
 
+			box.parse();
+
 			mTree.addLeaf(box);
 		} while (box != null);
 	}
-	
+
 	public void printTree() {
 		BoxTree.Leaf tree = mTree.getRoot();
 

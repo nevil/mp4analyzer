@@ -10,7 +10,7 @@ public class BoxTree {
 	}
 
 	public BoxTree(Box aBox) {
-		mRoot = new Leaf(null, true);
+		this();
 		addLeaf(mRoot, aBox);
 	}
 
@@ -34,9 +34,7 @@ public class BoxTree {
 		private boolean mIsRoot;
 
 		public Leaf(Box aBox) {
-			mBox = aBox;
-			mParent = null;
-			mIsRoot = false;
+			this(aBox, false);
 		}
 
 		private Leaf(Box aBox, boolean aIsRoot) {
