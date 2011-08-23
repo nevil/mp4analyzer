@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class MP4Analyzer {
-	AtomTree mTree;
+	BoxTree mTree;
 	MP4FileProvider mFile;
 
 	MP4Analyzer(String aFile) throws IOException {
-		mTree = new AtomTree();
+		mTree = new BoxTree();
 		mFile = new MP4FileProvider(aFile);
 	}
 
@@ -18,23 +18,23 @@ public class MP4Analyzer {
 	}
 	
 	public void printTree() {
-		AtomTree.Leaf tree = mTree.getRoot();
+		BoxTree.Leaf tree = mTree.getRoot();
 
 		printLeaf(tree);
 	}
 
-	private void printLeaf(AtomTree.Leaf aLeaf) {
+	private void printLeaf(BoxTree.Leaf aLeaf) {
 		if (aLeaf == null)
 			return;
 
 		if (!aLeaf.getIsRoot())
 		{
-			System.out.println(aLeaf.getAtom().toString());
+			System.out.println(aLeaf.getBox().toString());
 		}
 
-		ArrayList<AtomTree.Leaf> leafs = aLeaf.getLeafs();
+		ArrayList<BoxTree.Leaf> leafs = aLeaf.getLeafs();
 		if (leafs != null) {
-			Iterator<AtomTree.Leaf> it = leafs.iterator();
+			Iterator<BoxTree.Leaf> it = leafs.iterator();
 			while(it.hasNext()) {
 				printLeaf(it.next());
 			}

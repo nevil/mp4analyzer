@@ -2,25 +2,25 @@ package jp.hasselqvist.MP4Analyzer;
 
 import java.io.IOException;
 
-import jp.hasselqvist.MP4Analyzer.atoms.AtomFtyp;
+import jp.hasselqvist.MP4Analyzer.boxes.BoxFtyp;
 
 // Singleton recognizer
-public class AtomRecognizer {
-	private static AtomRecognizer mAtomRecognizer;
+public class BoxRecognizer {
+	private static BoxRecognizer mBoxRecognizer;
 	private MP4FileProvider mFile;
 
-	private AtomRecognizer() {
+	private BoxRecognizer() {
 		
 	}
 
-	public static AtomRecognizer createRecognizer(MP4FileProvider aFile) {
-		if (mAtomRecognizer == null) {
-			mAtomRecognizer = new AtomRecognizer();
+	public static BoxRecognizer createRecognizer(MP4FileProvider aFile) {
+		if (mBoxRecognizer == null) {
+			mBoxRecognizer = new BoxRecognizer();
 		}
 
-		mAtomRecognizer.mFile = aFile;
+		mBoxRecognizer.mFile = aFile;
 		
-		return mAtomRecognizer;
+		return mBoxRecognizer;
 	}
 /*	
 	public void parse() {
@@ -46,12 +46,12 @@ public class AtomRecognizer {
 		} while(true);
 	}
 */
-	public Atom identifyAtom() {
+	public Box identifyBox() {
 		long size = mFile.readInt32();
-		String type = mFile.readAtomType();
+		String type = mFile.readBoxType();
 
 		if ("ftyp".equals(type))
-			return new AtomFtyp(type, size);
+			return new BoxFtyp(type, size);
 		if ("free".equals(type))
 			return null;
 		else if ("moov".equals(type))

@@ -1,10 +1,10 @@
 package jp.hasselqvist.MP4Analyzer;
 
-public abstract class Atom {
+public abstract class Box {
 	private String mType;
 	private long mSize;
 
-	public Atom(String aType, long size) {
+	public Box(String aType, long size) {
 		mType = aType;
 		mSize = size;
 	}

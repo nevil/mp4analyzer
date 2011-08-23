@@ -43,7 +43,7 @@ public class MP4FileProvider {
 		return ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) | ((b[2] & 0xFF) << 8) | (b[3] & 0x000000FF);
 	}
 
-	public String readAtomType() {
+	public String readBoxType() {
 		byte[] type = new byte[4];
 		try {
 			mStream.read(type);

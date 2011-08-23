@@ -2,24 +2,24 @@ package jp.hasselqvist.MP4Analyzer;
 
 import java.util.ArrayList;
 
-public class AtomTree {
+public class BoxTree {
 	private Leaf mRoot;
 
-	public AtomTree() {
+	public BoxTree() {
 		mRoot = new Leaf(null, true);
 	}
 
-	public AtomTree(Atom aAtom) {
+	public BoxTree(Box aBox) {
 		mRoot = new Leaf(null, true);
-		addLeaf(mRoot, aAtom);
+		addLeaf(mRoot, aBox);
 	}
 
-	public void addLeaf(Atom aAtom) {
-		addLeaf(mRoot, aAtom);
+	public void addLeaf(Box aBox) {
+		addLeaf(mRoot, aBox);
 	}
 
-	public void addLeaf(Leaf aNode, Atom aAtom) {
-		Leaf leaf = new Leaf(aAtom);
+	public void addLeaf(Leaf aNode, Box aBox) {
+		Leaf leaf = new Leaf(aBox);
 		aNode.addLeaf(leaf);
 	}
 
@@ -28,19 +28,19 @@ public class AtomTree {
 	}
 
 	public class Leaf {
-		private final Atom mAtom;
+		private final Box mBox;
 		private Leaf mParent;
 		private ArrayList<Leaf> mLeafs;
 		private boolean mIsRoot;
 
-		public Leaf(Atom aAtom) {
-			mAtom = aAtom;
+		public Leaf(Box aBox) {
+			mBox = aBox;
 			mParent = null;
 			mIsRoot = false;
 		}
 
-		private Leaf(Atom aAtom, boolean aIsRoot) {
-			mAtom = aAtom;
+		private Leaf(Box aBox, boolean aIsRoot) {
+			mBox = aBox;
 			mParent = null;
 			mIsRoot = aIsRoot;
 		}
@@ -62,8 +62,8 @@ public class AtomTree {
 			return mLeafs;
 		}
 
-		public Atom getAtom() {
-			return mAtom;
+		public Box getBox() {
+			return mBox;
 		}
 
 		public boolean getIsRoot() {
