@@ -1,6 +1,13 @@
 package jp.hasselqvist.MP4Analyzer;
 
+import jp.hasselqvist.MP4Analyzer.boxes.BoxFree;
 import jp.hasselqvist.MP4Analyzer.boxes.BoxFtyp;
+import jp.hasselqvist.MP4Analyzer.boxes.BoxMdat;
+import jp.hasselqvist.MP4Analyzer.boxes.BoxMoov;
+import jp.hasselqvist.MP4Analyzer.boxes.BoxMvhd;
+import jp.hasselqvist.MP4Analyzer.boxes.BoxSkip;
+import jp.hasselqvist.MP4Analyzer.boxes.BoxTkhd;
+import jp.hasselqvist.MP4Analyzer.boxes.BoxTrak;
 
 // Singleton recognizer
 public class BoxRecognizer {
@@ -8,7 +15,7 @@ public class BoxRecognizer {
 	private MP4FileProvider mFile;
 
 	private BoxRecognizer(MP4FileProvider aProvider) {
-		mBoxRecognizer.mFile = aProvider;
+		mFile = aProvider;
 	}
 
 	public static BoxRecognizer getRecognizer() {
@@ -23,42 +30,32 @@ public class BoxRecognizer {
 		return mBoxRecognizer;
 	}
 
-/*	
-	public void parse() {
-		long size = -1;
-		String atom;
-		do {
-			if (-1 == (size = mFile.readInt32())) {
-				break;
-			}
-			atom = mFile.readAtomType();
-			try {
-				long more = (size - 4 - 4);
-				long skipped;
-				while (more != 0) {
-					skipped = mStream.skip(more);
-					more -= skipped;
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-				break;
-			}
-			mTree.addLeaf(Atom.createAtom(atom, size));
-		} while(true);
-	}
-*/
 	public Box identifyBox() {
+		long position = mFile.getPosition();
 		long size = mFile.readInt32();
 		String type = mFile.readBoxType();
 
+		// TODO support size 1 - 64 bit large size, and 0 - to the end of file
+		// TODO support extended type, uuid + 16 byte user type
+
 		if ("ftyp".equals(type))
-			return new BoxFtyp(type, size);
+			return new BoxFtyp(type, size, position);
 		if ("free".equals(type))
-			return null;
+			return new BoxFree(type, size, position);
+		if ("skip".equals(type))
+			return new BoxSkip(type, size, position);
 		else if ("moov".equals(type))
-			return null;
+			return new BoxMoov(type, size, position);
+		else if ("mvhd".equals(type))
+			return new BoxMvhd(type, size, position);
 		else if ("mdat".equals(type))
-			return null;
+			return new BoxMdat(type, size, position);
+		else if ("trak".equals(type))
+			return new BoxTrak(type, size, position);
+		else if ("tkhd".equals(type))
+			return new BoxTkhd(type, size, position);
+		else
+			System.out.println("------ " + type + " -----");
 
 		return null;
 	}

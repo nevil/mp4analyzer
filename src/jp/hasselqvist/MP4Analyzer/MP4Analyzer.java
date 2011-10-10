@@ -1,8 +1,9 @@
 package jp.hasselqvist.MP4Analyzer;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
+
+import jp.hasselqvist.MP4Analyzer.BoxTree.BoxTreeArray;
 
 public class MP4Analyzer {
 	BoxTree mTree;
@@ -16,38 +17,44 @@ public class MP4Analyzer {
 	public void analyze() {
 		BoxRecognizer recognizer = BoxRecognizer.getRecognizer();
 		Box box = null;
+		BoxTree subTree = null;
 
 		do {
 			box = recognizer.identifyBox();
 			if (box == null)
 				break;
 
-			box.parse();
-
-			mTree.addLeaf(box);
+			subTree = box.parse();
+			BoxTree leaf = mTree.addLeaf(box);
+			if (subTree != null) {
+				leaf.appendTree(subTree);
+			}
 		} while (box != null);
 	}
 
 	public void printTree() {
-		BoxTree.Leaf tree = mTree.getRoot();
-
-		printLeaf(tree);
+		printLeaf(mTree, 0);
 	}
 
-	private void printLeaf(BoxTree.Leaf aLeaf) {
+	private void printLeaf(BoxTree aLeaf, int indent) {
 		if (aLeaf == null)
 			return;
 
-		if (!aLeaf.getIsRoot())
+		if (!aLeaf.isRoot())
 		{
-			System.out.println(aLeaf.getBox().toString());
+			String s = "";
+			for(int i = 0; i < indent; ++i)
+				s = s + "-";
+
+			System.out.println(s + aLeaf.getBox().toString());
 		}
 
-		ArrayList<BoxTree.Leaf> leafs = aLeaf.getLeafs();
-		if (leafs != null) {
-			Iterator<BoxTree.Leaf> it = leafs.iterator();
+		++indent;
+		BoxTreeArray leafs = aLeaf.getLeafs();
+		if (leafs.size() > 0) {
+			Iterator<BoxTree> it = leafs.iterator();
 			while(it.hasNext()) {
-				printLeaf(it.next());
+				printLeaf(it.next(), indent);
 			}
 		}
 	}

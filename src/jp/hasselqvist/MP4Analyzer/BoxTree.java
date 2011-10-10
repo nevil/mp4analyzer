@@ -1,71 +1,56 @@
 package jp.hasselqvist.MP4Analyzer;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class BoxTree {
-	private Leaf mRoot;
+	private final Box mBox;
+	private BoxTreeArray mLeafs;
+	private boolean mIsRoot = false;
+
+	public class BoxTreeArray extends ArrayList<BoxTree> {
+		private static final long serialVersionUID = 3859507086587808884L;
+
+	}
 
 	public BoxTree() {
-		mRoot = new Leaf(null, true);
+		this(null);
+		mIsRoot = true;
 	}
 
-	public BoxTree(Box aBox) {
-		this();
-		addLeaf(mRoot, aBox);
+	private BoxTree(Box aBox) {
+		mBox = aBox;
+		mIsRoot = false;
+		mLeafs = new BoxTreeArray();
 	}
 
-	public void addLeaf(Box aBox) {
-		addLeaf(mRoot, aBox);
+	public BoxTree addLeaf(Box aBox) {
+		BoxTree leaf = new BoxTree(aBox);
+		mLeafs.add(leaf);
+		return leaf;
 	}
 
-	public void addLeaf(Leaf aNode, Box aBox) {
-		Leaf leaf = new Leaf(aBox);
-		aNode.addLeaf(leaf);
+	public void appendTree(BoxTree aTree) {
+		if (aTree.mIsRoot) {
+			Iterator<BoxTree>it = aTree.mLeafs.iterator();
+			while(it.hasNext()) {
+				mLeafs.add(it.next());
+			}
+		}
+		else {
+			mLeafs.add(aTree);
+		}
 	}
 
-	public Leaf getRoot() {
-		return mRoot;
+	public Box getBox() {
+		return mBox;
 	}
 
-	public class Leaf {
-		private final Box mBox;
-		private Leaf mParent;
-		private ArrayList<Leaf> mLeafs;
-		private boolean mIsRoot;
+	public BoxTreeArray getLeafs() {
+		return mLeafs;
+	}
 
-		public Leaf(Box aBox) {
-			this(aBox, false);
-		}
-
-		private Leaf(Box aBox, boolean aIsRoot) {
-			mBox = aBox;
-			mParent = null;
-			mIsRoot = aIsRoot;
-		}
-
-		public void addLeaf(Leaf aLeaf) {
-			aLeaf.mParent = this;
-
-			if (mLeafs == null)
-				mLeafs = new ArrayList<Leaf>();
-
-			mLeafs.add(aLeaf);
-		}
-
-		public Leaf getParent() {
-			return mParent;
-		}
-
-		public ArrayList<Leaf> getLeafs() {
-			return mLeafs;
-		}
-
-		public Box getBox() {
-			return mBox;
-		}
-
-		public boolean getIsRoot() {
-			return mIsRoot;
-		}
+	public boolean isRoot() {
+		return mIsRoot;
 	}
 }

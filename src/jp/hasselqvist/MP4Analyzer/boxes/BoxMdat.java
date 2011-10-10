@@ -1,6 +1,7 @@
 package jp.hasselqvist.MP4Analyzer.boxes;
 
 import jp.hasselqvist.MP4Analyzer.Box;
+import jp.hasselqvist.MP4Analyzer.BoxTree;
 
 public class BoxMdat extends Box {
 
@@ -8,9 +9,9 @@ public class BoxMdat extends Box {
 		super(aType, aSize, aStartOffset);
 	}
 
-	public boolean parse() {
+	public BoxTree parse() {
 		mProvider.skipBytes((int)(mSize - 8)); //temporary
-		return true;
+		return null;
 	}
 
 }

@@ -20,7 +20,7 @@ public abstract class Box {
 		return mSize;
 	}
 
-	abstract public boolean parse();
+	abstract public BoxTree parse();
 
 	public String toString() {
 		return String.format("%s (%d)", mType, mSize);

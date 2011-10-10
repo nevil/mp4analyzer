@@ -1,6 +1,7 @@
 package jp.hasselqvist.MP4Analyzer.boxes;
 
 import jp.hasselqvist.MP4Analyzer.Box;
+import jp.hasselqvist.MP4Analyzer.BoxTree;
 
 public class BoxFtyp extends Box {
 	String mMajorBrand;
@@ -11,7 +12,8 @@ public class BoxFtyp extends Box {
 		super(aType, aSize, aStartOffset);
 	}
 
-	public boolean parse() {
+	@Override
+	public BoxTree parse() {
 		mMajorBrand = mProvider.readBoxType();
 		mMinorVersion = mProvider.readInt32();
 
@@ -21,10 +23,11 @@ public class BoxFtyp extends Box {
 		for (int i = 0; i < left; ++i)
 			mCompatibleBrands[i] = mProvider.readBoxType();
 
-		return true;
+		return null;
 	}
 
+	@Override
 	public String toString() {
-		return String.format("%s (%d)\n\t%s, %d, %s", mType, mSize, mMajorBrand, mMinorVersion, mCompatibleBrands[0]);
+		return super.toString() + String.format("\n\t%s, %d, %s", mType, mSize, mMajorBrand, mMinorVersion, mCompatibleBrands[0]);
 	}
 }
