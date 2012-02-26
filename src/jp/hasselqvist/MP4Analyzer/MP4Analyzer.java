@@ -8,7 +8,7 @@ import jp.hasselqvist.MP4Analyzer.BoxTree.BoxTreeArray;
 public class MP4Analyzer {
 	BoxTree mTree;
 
-	MP4Analyzer(String aFile) throws IOException {
+	public MP4Analyzer(String aFile) throws IOException {
 		mTree = new BoxTree();
 		MP4FileProvider.createProvider(aFile);
 		BoxRecognizer.createRecognizer(MP4FileProvider.getProvider());
